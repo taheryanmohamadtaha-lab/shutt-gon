@@ -1,0 +1,20 @@
+{
+  "name": "shadow-operation",
+  "version": "1.0.0",
+  "description": "عملیات سایه — بازی تیراندازی سه‌بعدی اول‌شخص فارسی (FPS) با HTML5 و Capacitor",
+  "private": true,
+  "scripts": {
+    "start": "npx serve .",
+    "prepare:www": "rm -rf www && mkdir -p www && cp -r index.html manifest.json sw.js css js assets www/",
+    "cap:sync": "npm run prepare:www && npx cap sync android",
+    "cap:open": "npx cap open android",
+    "cap:build": "npm run cap:sync && cd android && ./gradlew assembleDebug"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.1.0",
+    "@capacitor/core": "^6.1.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.1.0"
+  }
+}

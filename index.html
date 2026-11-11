@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0d1a12">
+<title>عملیات سایه | Shadow Operation</title>
+<meta name="description" content="بازی تیراندازی سه‌بعدی اول‌شخص با منوی کاملاً فارسی — عملیات سایه">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="assets/images/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/game.css">
+<link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+
+<!-- ===================== صفحه اصلی ===================== -->
+<div id="screen-menu" class="screen active">
+  <div class="menu-bg"></div>
+  <div class="menu-content">
+    <div class="game-logo">
+      <div class="logo-icon">🎯</div>
+      <h1 class="logo-title">عملیات سایه</h1>
+      <div class="logo-subtitle">SHADOW OPERATION</div>
+      <div class="logo-tagline">یگان ویژه سایه — مأموریت آغاز می‌شود</div>
+    </div>
+
+    <div class="player-info-bar">
+      <div class="info-item">🎖️ <span id="menu-rank">سرباز</span></div>
+      <div class="info-item">💰 <span id="menu-money">۰</span></div>
+      <div class="info-item">⭐ <span id="menu-xp">۰</span></div>
+      <div class="info-item">🏆 <span id="menu-score">۰</span></div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="rank-progress"></div></div>
+
+    <nav class="main-menu">
+      <button class="btn btn-primary btn-big" id="btn-continue">▶ ادامه بازی</button>
+      <button class="btn btn-menu" id="btn-levels">🗺️ انتخاب مرحله</button>
+      <button class="btn btn-menu" id="btn-weapons">🔫 انتخاب سلاح</button>
+      <button class="btn btn-menu" id="btn-shop">🛒 فروشگاه و ارتقا</button>
+      <button class="btn btn-menu" id="btn-profile">👤 پروفایل بازیکن</button>
+      <button class="btn btn-menu" id="btn-daily">📅 مأموریت روزانه</button>
+      <button class="btn btn-menu" id="btn-achievements">🏅 دستاوردها</button>
+      <button class="btn btn-menu" id="btn-settings">⚙️ تنظیمات</button>
+      <button class="btn btn-menu" id="btn-help">❓ راهنمای بازی</button>
+      <button class="btn btn-danger" id="btn-exit">🚪 خروج</button>
+    </nav>
+    <div class="version-tag">نسخه ۱٫۰ — یگان ویژه سایه</div>
+  </div>
+</div>
+
+<!-- ===================== انتخاب مرحله ===================== -->
+<div id="screen-levels" class="screen">
+  <div class="screen-header">
+    <h2>🗺️ انتخاب مرحله</h2>
+    <button class="btn btn-small" data-back>← بازگشت</button>
+  </div>
+  <div class="screen-body">
+    <div id="levels-list" class="levels-grid"></div>
+  </div>
+</div>
+
+<!-- ===================== انتخاب سلاح ===================== -->
+<div id="screen-weapons" class="screen">
+  <div class="screen-header">
+    <h2>🔫 انتخاب سلاح</h2>
+    <button class="btn btn-small" data-back>← بازگشت</button>
+  </div>
+  <div class="screen-body">
+    <div id="weapons-list" class="weapons-grid"></div>
+  </div>
+</div>
+
+<!-- ===================== فروشگاه ===================== -->
+<div id="screen-shop" class="screen">
+  <div class="screen-header">
+    <h2>🛒 فروشگاه و ارتقا</h2>
+    <div class="shop-money">💰 پول شما: <span id="shop-money">۰</span></div>
+    <button class="btn btn-small" data-back>← بازگشت</button>
+  </div>
+  <div class="screen-body">
+    <p class="hint-text">سلاح‌های خریداری‌شده را ارتقا دهید تا قوی‌تر شوند. هر سطح ارتقا آمار سلاح را بهتر می‌کند.</p>
+    <div id="shop-list"></div>
+  </div>
+</div>
+
+<!-- ===================== پروفایل ===================== -->
+<div id="screen-profile" class="screen">
+  <div class="screen-header">
+    <h2>👤 پروفایل بازیکن</h2>
+    <button class="btn btn-small" data-back>← بازگشت</button>
+  </div>
+  <div class="screen-body">
+    <div id="profile-content"></div>
+  </div>
+</div>
+
+<!-- ===================== مأموریت روزانه ===================== -->
+<div id="screen-daily" class="screen">
+  <div class="screen-header">
+    <h2>📅 مأموریت روزانه</h2>
+    <button class="btn btn-small" data-back>← بازگشت</button>
+  </div>
+  <div class="screen-body">
+    <div class="daily-box">
+      <h3>🎯 مأموریت امروز</h3>
+      <p>امروز ۱۵ دشمن را از بین ببرید و ۵۰۰ پول پاداش بگیرید.</p>
+      <div class="daily-progress" id="daily-progress">امروز: ۰ / ۱۵ کشته</div>
+      <button class="btn btn-primary btn-big" id="btn-daily-claim">دریافت پاداش (۵۰۰ پول)</button>
+      <p class="hint-text">مأموریت روزانه هر روز ساعت ۰۰:۰۰ بازنشانی می‌شود.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== دستاوردها ===================== -->
+<div id="screen-achievements" class="screen">
+  <div class="screen-header">
+    <h2>🏅 دستاوردها</h2>
+    <button class="btn btn-small" data-back>← بازگشت</button>
+  </div>
+  <div class="screen-body">
+    <div id="achievements-list"></div>
+  </div>
+</div>
+
+<!-- ===================== تنظیمات ===================== -->
+<div id="screen-settings" class="screen">
+  <div class="screen-header">
+    <h2>⚙️ تنظیمات</h2>
+    <button class="btn btn-small" data-back>← بازگشت</button>
+  </div>
+  <div class="screen-body">
+    <div class="settings-box">
+      <label class="setting-row">
+        <span>کیفیت گرافیک</span>
+        <select id="set-quality">
+          <option value="low">پایین (عملکرد بهتر)</option>
+          <option value="medium">متوسط</option>
+          <option value="high">بالا</option>
+        </select>
+      </label>
+      <label class="setting-row">
+        <span>حساسیت دوربین: <b id="set-sensitivity-val">۱٫۰</b></span>
+        <input type="range" id="set-sensitivity" min="0.3" max="3" step="0.1" value="1">
+      </label>
+      <label class="setting-row">
+        <span>صدای موسیقی</span>
+        <input type="range" id="set-music" min="0" max="1" step="0.05" value="0.5">
+      </label>
+      <label class="setting-row">
+        <span>صدای افکت‌ها</span>
+        <input type="range" id="set-sfx" min="0" max="1" step="0.05" value="0.8">
+      </label>
+      <label class="setting-row">
+        <span>میدان دید (FOV): <b id="set-fov-val">۷۵</b></span>
+        <input type="range" id="set-fov" min="60" max="100" step="1" value="75">
+      </label>
+      <label class="setting-row">
+        <span>اندازه دکمه‌های لمسی: <b id="set-btnscale-val">۱۰۰٪</b></span>
+        <input type="range" id="set-btnscale" min="0.7" max="1.5" step="0.05" value="1">
+      </label>
+      <label class="setting-row checkbox-row">
+        <span>لرزش هنگام آسیب</span>
+        <input type="checkbox" id="set-vibration" checked>
+      </label>
+      <label class="setting-row checkbox-row">
+        <span>سایه‌ها</span>
+        <input type="checkbox" id="set-shadows" checked>
+      </label>
+      <label class="setting-row">
+        <span>زبان</span>
+        <select disabled><option>فارسی (پیش‌فرض)</option></select>
+      </label>
+      <button class="btn btn-danger btn-block" id="btn-reset-save">🗑️ حذف کامل پیشرفت بازی</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== راهنما ===================== -->
+<div id="screen-help" class="screen">
+  <div class="screen-header">
+    <h2>❓ راهنمای بازی</h2>
+    <button class="btn btn-small" data-back>← بازگشت</button>
+  </div>
+  <div class="screen-body">
+    <div class="help-box">
+      <h3>🎮 کنترل‌ها</h3>
+      <p><b>موبایل:</b> جوی‌استیک سمت چپ برای حرکت، کشیدن انگشت در سمت راست برای چرخاندن دوربین.</p>
+      <p><b>دسکتاپ:</b> WASD برای حرکت، ماوس برای دوربین، کلیک چپ شلیک، کلیک راست نشانه‌گیری، Shift دویدن، Space پرش، C خم شدن، R تعویض خشاب، G نارنجک، ۱ و ۲ تعویض سلاح، N دید شبانه، Esc مکث.</p>
+      <h3>🎯 هدف بازی</h3>
+      <p>در هر مرحله هدف مشخصی دارید: از بین بردن دشمنان، نابودی مخازن، نجات گروگان‌ها یا شکست فرمانده دشمن. نقشه کوچک (بالا سمت چپ) موقعیت دشمنان و اهداف را نشان می‌دهد.</p>
+      <h3>💡 نکات</h3>
+      <p>• هدشات آسیب دوبرابر می‌زند.<br>
+      • بشکه‌های قرمز منفجر می‌شوند — از آن‌ها به نفع خود استفاده کنید!<br>
+      • جعبه‌های سفید سلامتی و جعبه‌های زرد مهمات هستند.<br>
+      • دشمنان ممکن است نیروی کمکی بخواهند؛ سریع عمل کنید.<br>
+      • با پول بازی سلاح بخرید و آن‌ها را ارتقا دهید.<br>
+      • در مأموریت شبانه، دکمه دید شبانه (N) را فعال کنید.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== صفحه بازی ===================== -->
+<div id="screen-game" class="screen">
+  <div id="game-container"></div>
+
+  <!-- HUD -->
+  <div id="hud" style="display:none">
+    <!-- بالا سمت راست: سلامتی و امتیاز -->
+    <div id="hud-top-right">
+      <div class="hud-panel">
+        <div class="health-label">سلامتی</div>
+        <div class="health-bar"><div id="health-fill"></div></div>
+        <div id="health-text">۱۰۰</div>
+      </div>
+      <div class="hud-panel hud-row">
+        <span>⭐ امتیاز: <b id="score-text">۰</b></span>
+        <span>💀 کشته: <b id="kills-text">۰</b></span>
+      </div>
+      <div class="hud-panel" id="timer-box" style="display:none">⏱️ <span id="timer-text">۰:۰۰</span></div>
+    </div>
+
+    <!-- بالا سمت چپ: نقشه کوچک و هدف -->
+    <div id="hud-top-left">
+      <canvas id="minimap" width="140" height="140"></canvas>
+      <div class="hud-panel objective-panel">
+        <div class="objective-title" id="mission-name">مأموریت</div>
+        <div id="objective-text">هدف</div>
+        <div id="objective-progress"></div>
+      </div>
+    </div>
+
+    <!-- پایین سمت راست: مهمات -->
+    <div id="hud-bottom-right">
+      <div class="hud-panel ammo-panel">
+        <div id="weapon-name">تفنگ</div>
+        <div class="ammo-display"><span id="ammo-mag">۳۰</span><span class="ammo-sep">/</span><span id="ammo-reserve">۱۲۰</span></div>
+        <div id="reload-hint" style="display:none">در حال تعویض خشاب...</div>
+        <div class="grenade-display">💣 نارنجک: <span id="grenade-count">۳</span></div>
+      </div>
+    </div>
+
+    <!-- وسط صفحه -->
+    <div id="crosshair">+</div>
+    <div id="hitmarker">✕</div>
+    <div id="alert-indicator" style="display:none">⚠️ دشمن شناسایی شد!</div>
+
+    <!-- بریفینگ مأموریت -->
+    <div id="briefing-box" style="display:none">
+      <div class="briefing-title">📻 دستور فرماندهی</div>
+      <div id="briefing-text"></div>
+    </div>
+
+    <!-- کنترل‌های لمسی -->
+    <div id="touch-controls">
+      <div id="joystick-zone">
+        <div id="joystick-base"><div id="joystick-knob"></div></div>
+      </div>
+      <div id="look-zone"></div>
+      <div class="touch-buttons-right">
+        <button class="touch-btn" id="btn-fire">🔥<span>شلیک</span></button>
+        <button class="touch-btn" id="btn-ads">🎯<span>نشانه</span></button>
+        <button class="touch-btn" id="btn-reload">🔄<span>خشاب</span></button>
+        <button class="touch-btn" id="btn-grenade">💣<span>نارنجک</span></button>
+      </div>
+      <div class="touch-buttons-left">
+        <button class="touch-btn" id="btn-jump">⬆️<span>پرش</span></button>
+        <button class="touch-btn" id="btn-crouch">⬇️<span>خم</span></button>
+        <button class="touch-btn" id="btn-sprint">🏃<span>دویدن</span></button>
+        <button class="touch-btn" id="btn-weapon">🔫<span>سلاح</span></button>
+        <button class="touch-btn" id="btn-nightvision" style="display:none">🌙<span>دید شب</span></button>
+        <button class="touch-btn" id="btn-pause">⏸️<span>مکث</span></button>
+      </div>
+    </div>
+
+    <!-- افکت‌ها -->
+    <div id="damage-vignette"></div>
+    <div id="scope-overlay"></div>
+    <div id="nightvision-overlay" style="display:none"></div>
+  </div>
+
+  <!-- منوی مکث -->
+  <div id="pause-menu" class="overlay" style="display:none">
+    <div class="overlay-box">
+      <h2>⏸️ مکث</h2>
+      <button class="btn btn-primary btn-big" id="btn-resume">▶ ادامه</button>
+      <button class="btn btn-menu" id="btn-restart">🔄 شروع مجدد مأموریت</button>
+      <button class="btn btn-danger" id="btn-quit">🚪 خروج به منو</button>
+    </div>
+  </div>
+
+  <!-- پایان موفق مأموریت -->
+  <div id="mission-complete" class="overlay" style="display:none">
+    <div class="overlay-box">
+      <h2>🏆 مأموریت کامل شد!</h2>
+      <div class="result-rows">
+        <div>⭐ امتیاز نهایی: <b id="complete-score">۰</b></div>
+        <div>💀 دشمنان کشته‌شده: <b id="complete-kills">۰</b></div>
+        <div>🎯 دقت تیراندازی: <b id="complete-accuracy">۰٪</b></div>
+        <div>⏱️ زمان: <b id="complete-time">۰:۰۰</b></div>
+        <div>💰 پاداش: <b id="complete-money">۰</b></div>
+        <div>⭐ تجربه: <b id="complete-xp">۰</b></div>
+      </div>
+      <button class="btn btn-primary btn-big" id="btn-next-mission">▶ مأموریت بعدی</button>
+      <button class="btn btn-menu" id="btn-complete-menu">🏠 بازگشت به منو</button>
+    </div>
+  </div>
+
+  <!-- شکست مأموریت -->
+  <div id="mission-failed" class="overlay" style="display:none">
+    <div class="overlay-box">
+      <h2>💀 مأموریت ناموفق بود</h2>
+      <p id="fail-reason">شما کشته شدید!</p>
+      <button class="btn btn-primary btn-big" id="btn-retry">🔄 تلاش مجدد</button>
+      <button class="btn btn-menu" id="btn-fail-menu">🏠 بازگشت به منو</button>
+    </div>
+  </div>
+</div>
+
+<!-- پیام موقت -->
+<div id="toast" style="display:none"></div>
+
+<script src="js/lib/three.min.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/weapons.js"></script>
+<script src="js/missions.js"></script>
+<script src="js/enemies.js"></script>
+<script src="js/player.js"></script>
+<script src="js/controls.js"></script>
+<script src="js/game-engine.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

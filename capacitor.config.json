@@ -1,0 +1,14 @@
+{
+  "appId": "ir.shadowoperation.game",
+  "appName": "عملیات سایه",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https",
+    "cleartext": false
+  },
+  "android": {
+    "allowMixedContent": false,
+    "captureInput": true,
+    "webContentsDebugging": false
+  }
+}

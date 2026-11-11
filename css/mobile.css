@@ -1,0 +1,120 @@
+/* ============================================================
+   عملیات سایه — mobile.css
+   کنترل‌های لمسی و سازگاری با گوشی/تبلت
+   ============================================================ */
+#touch-controls { position: absolute; inset: 0; pointer-events: none; }
+
+/* ---------- جوی‌استیک (سمت چپ صفحه) ---------- */
+#joystick-zone {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 45%;
+  height: 65%;
+  pointer-events: auto;
+}
+#joystick-base {
+  position: absolute;
+  bottom: 90px;
+  left: 30px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+  border: 2px solid rgba(255,255,255,0.25);
+}
+#joystick-knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.28);
+  border: 2px solid rgba(255,255,255,0.5);
+}
+
+/* ---------- ناحیه چرخش دوربین (سمت راست صفحه) ---------- */
+#look-zone {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 55%;
+  height: 100%;
+  pointer-events: auto;
+}
+
+/* ---------- دکمه‌ها ---------- */
+.touch-buttons-right {
+  position: absolute;
+  bottom: 20px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: auto;
+}
+.touch-buttons-left {
+  position: absolute;
+  bottom: 20px;
+  left: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: auto;
+}
+.touch-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.35);
+  background: rgba(20, 40, 26, 0.55);
+  color: #fff;
+  font-size: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  pointer-events: auto;
+}
+.touch-btn span { font-size: 11px; margin-top: 1px; }
+.touch-btn.active, .touch-btn.toggled {
+  background: rgba(232, 160, 32, 0.7);
+  border-color: #ffd97a;
+}
+#btn-fire {
+  width: 84px;
+  height: 84px;
+  background: rgba(180, 40, 40, 0.55);
+  border-color: rgba(255, 120, 120, 0.6);
+  font-size: 30px;
+}
+#btn-fire.active { background: rgba(255, 80, 40, 0.8); }
+
+/* ---------- سازگاری با دسکتاپ ---------- */
+@media (hover: hover) and (pointer: fine) {
+  #touch-controls { display: none; }
+}
+
+/* ---------- گوشی‌های کوچک ---------- */
+@media (max-width: 700px) {
+  #minimap { width: 100px; height: 100px; }
+  .objective-panel { max-width: 150px; font-size: 11px; }
+  #hud-top-right { min-width: 150px; }
+  .ammo-display { font-size: 24px; }
+  .ammo-panel { min-width: 105px; }
+  #joystick-base { width: 110px; height: 110px; bottom: 80px; left: 20px; }
+  .touch-buttons-left { left: 150px; }
+}
+
+/* ---------- حالت افقی (Landscape) ---------- */
+@media (orientation: portrait) and (max-width: 700px) {
+  .menu-content { padding-top: 8px; }
+  .logo-icon { font-size: 40px; }
+  .logo-title { font-size: 30px; }
+  .main-menu { gap: 6px; }
+  .btn { padding: 9px 14px; font-size: 14px; }
+  .btn-big { font-size: 16px; padding: 11px 16px; }
+}

@@ -1,0 +1,56 @@
+# ============================================================
+# عملیات سایه — ساخت خودکار فایل APK اندروید با GitHub Actions
+# هر بار که کد به شاخه main پوش شود، APK ساخته و در بخش
+# Actions به‌صورت Artifact قابل دانلود قرار می‌گیرد.
+# ============================================================
+name: ساخت APK اندروید — عملیات سایه
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    name: ساخت APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: دریافت کد پروژه
+        uses: actions/checkout@v4
+
+      - name: نصب Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: نصب وابستگی‌ها
+        run: npm install
+
+      - name: آماده‌سازی پوشه www (فقط فایل‌های لازم بازی)
+        run: npm run prepare:www
+
+      - name: نصب Java 17 (مورد نیاز اندروید)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: ساخت پروژه اندروید با Capacitor
+        run: |
+          npx cap add android || true
+          npx cap sync android
+
+      - name: ساخت APK نسخه Debug
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: آپلود فایل APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: shadow-operation-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 90
